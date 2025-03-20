@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Practica_1</string>
+    <string name="cambio_de_color">Cambio de color</string>
+    <string name="realizar_consulta">Realizar consulta</string>
+
+    <string name="Tit1">Imagen 1</string>
+    <string name="Tit2">Imagen 2</string>
+    <string name="Tit3">Imagen 3</string>
+    <string name="Tit4">Imagen 4</string>
+    <string name="Tit5">Imagen 5</string>
+    <string name="Tit6">Imagen 6</string>
+</resources>
