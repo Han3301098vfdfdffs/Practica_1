@@ -1,13 +1,17 @@
 package com.example.practica_1.viewmodel
 
+import android.os.SystemClock
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MainViewModel: ViewModel() {
 
@@ -35,6 +39,16 @@ class MainViewModel: ViewModel() {
         }
     }
 
+    private fun counter3(){
+        for (i in 1..6){
+            Thread.sleep(1000)
+            countTime = i
+        }
+    }
+    fun goCounter(){
+        countTime = 0
+        counter3()
+    }
     fun startCounter()
     {
         isCounterFinished = false
