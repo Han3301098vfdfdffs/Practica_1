@@ -39,7 +39,7 @@ import com.example.practica_1.model.Titulo
 import com.example.practica_1.viewmodel.MainViewModel
 
 @Composable
-fun practicaApp(viewModel: MainViewModel,modifier: Modifier = Modifier){
+fun ImagesCard(viewModel: MainViewModel,titulo: Titulo, modifier: Modifier = Modifier){
     var changeButton by remember{
         mutableStateOf(false)
     }
@@ -49,47 +49,6 @@ fun practicaApp(viewModel: MainViewModel,modifier: Modifier = Modifier){
     LaunchedEffect(viewModel.countTime2) {
         if (viewModel.isCounterFinished) changeButton = false
     }
-
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text("${viewModel.countTime} [s]")
-        Spacer(modifier = Modifier.height(30.dp))
-        Text("${viewModel.countTime2} [s]")
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(onClick = {
-            if(!changeButton) viewModel.startCounter() else viewModel.cancelarCounter()
-            changeButton = !changeButton},
-            modifier = Modifier.size(width = 150.dp, height = 50.dp),
-            colors = ButtonDefaults.buttonColors(
-                if(changeButton) {
-                    Color.Red}  else Color.Green),
-        ) {
-            Text(text = if(changeButton) "Cancelar" else "Iniciar")
-        }
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(onClick = {
-            changeColor = !changeColor},
-            colors = ButtonDefaults.buttonColors(if (changeColor) Color.Blue else Color.Red))
-        {
-            Text(stringResource(R.string.cambio_de_color))
-        }
-        Spacer(modifier = Modifier.height(30.dp))
-        Text("${viewModel.countTime3} [s]")
-        Text(viewModel.resultState)
-        Spacer(modifier = Modifier.height(30.dp))
-        Button(onClick = {
-            viewModel.fetchData()
-        }) {
-            Text(stringResource(R.string.realizar_consulta))
-        }
-    }
-}
-
-@Composable
-fun ImagesCard(titulo: Titulo, modifier: Modifier = Modifier){
     Card(modifier = Modifier.padding(16.dp)){
         Row(verticalAlignment = Alignment.CenterVertically){
             Column(
@@ -105,6 +64,24 @@ fun ImagesCard(titulo: Titulo, modifier: Modifier = Modifier){
                     contentScale = ContentScale.Crop
                 )
             }
+            Column(
+                modifier = Modifier.weight(0.6f).padding(10.dp)
+            ){
+                Text("${viewModel.countTime} [s]")
+                Spacer(modifier = Modifier.height(30.dp))
+                Text("${viewModel.countTime2} [s]")
+                Spacer(modifier = Modifier.height(30.dp))
+                Button(onClick = {
+                    if(!changeButton) viewModel.startCounter() else viewModel.cancelarCounter()
+                    changeButton = !changeButton},
+                    modifier = Modifier.size(width = 150.dp, height = 50.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        if(changeButton) {
+                            Color.Red}  else Color.Green),
+                ) {
+                    Text(text = if(changeButton) "Cancelar" else "Iniciar")
+                }
+            }
         }
     }
 }
@@ -114,6 +91,7 @@ fun CardList(titulos: List<Titulo>, modifier: Modifier = Modifier){
     LazyColumn(modifier = modifier) {
         items(titulos.indices.toList()){ index ->
             ImagesCard(
+                viewModel = MainViewModel(),
                 titulo = titulos[index],
                 modifier= Modifier.padding(24.dp)
             )
@@ -127,10 +105,5 @@ fun CardList(titulos: List<Titulo>, modifier: Modifier = Modifier){
 fun ImagesCard_Preview(){
     val dataSource = DataSource()
     val titulos = dataSource.LoadTitulos()
-    ImagesCard(titulo = titulos[0])
+    ImagesCard(viewModel = MainViewModel(),titulo = titulos[0])
 }
-//@Preview
-//@Composable
-//fun practicaAppPreview(){
-//    practicaApp()
-//}
