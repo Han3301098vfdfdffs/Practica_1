@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,11 +40,8 @@ import com.example.practica_1.model.Titulo
 import com.example.practica_1.viewmodel.MainViewModel
 
 @Composable
-fun ImagesCard(viewModel: MainViewModel,titulo: Titulo, modifier: Modifier = Modifier){
+fun ImagesCard(viewModel: MainViewModel,titulo: Titulo, isFirst: Boolean = false, modifier: Modifier = Modifier){
     var changeButton by remember{
-        mutableStateOf(false)
-    }
-    var changeColor by remember {
         mutableStateOf(false)
     }
     LaunchedEffect(viewModel.countTime2) {
@@ -72,8 +70,15 @@ fun ImagesCard(viewModel: MainViewModel,titulo: Titulo, modifier: Modifier = Mod
                 Text("${viewModel.countTime2} [s]")
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(onClick = {
-                    if(!changeButton) viewModel.startCounter() else viewModel.cancelarCounter()
-                    changeButton = !changeButton},
+                        if(isFirst){
+                            if(!changeButton) viewModel.goCounter() else viewModel.cancelarCounter()
+                            changeButton = !changeButton
+                        }
+                        else{
+                            if(!changeButton) viewModel.startCounter() else viewModel.cancelarCounter()
+                            changeButton = !changeButton
+                        }
+                    },
                     modifier = Modifier.size(width = 150.dp, height = 50.dp),
                     colors = ButtonDefaults.buttonColors(
                         if(changeButton) {
@@ -89,10 +94,11 @@ fun ImagesCard(viewModel: MainViewModel,titulo: Titulo, modifier: Modifier = Mod
 @Composable
 fun CardList(titulos: List<Titulo>, modifier: Modifier = Modifier){
     LazyColumn(modifier = modifier) {
-        items(titulos.indices.toList()){ index ->
+        itemsIndexed(titulos){ index, titulo ->
             ImagesCard(
                 viewModel = MainViewModel(),
-                titulo = titulos[index],
+                titulo = titulo,
+                isFirst = index == 0,
                 modifier= Modifier.padding(24.dp)
             )
         }
